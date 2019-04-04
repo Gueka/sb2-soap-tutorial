@@ -37,8 +37,10 @@ public class OfferService {
 
 	private void hasYearPromotion(Data data, List<String> offers) {
 		Calendar todayDate = new GregorianCalendar();
-		Calendar initDate = data.getInitDate().toGregorianCalendar();
-		if(initDate.get(Calendar.MONTH) == todayDate.get(Calendar.MONTH)){
+        Calendar initDate = data.getInitDate().toGregorianCalendar();
+        
+        if(initDate.get(Calendar.MONTH) == todayDate.get(Calendar.MONTH) && 
+            initDate.get(Calendar.YEAR) != todayDate.get(Calendar.YEAR)){
 			offers.add(NEW_YEAR_MEMBER_DISCOUNT_MESSAGE);
 		}
 	}
