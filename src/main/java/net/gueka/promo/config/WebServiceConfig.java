@@ -1,4 +1,4 @@
-package net.gueka.service.config;
+package net.gueka.promo.config;
 
 import javax.servlet.Servlet;
 

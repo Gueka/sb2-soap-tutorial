@@ -73,9 +73,10 @@ dependencies {
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	implementation "org.springframework.boot:spring-boot-starter-web-services"
     compile "wsdl4j:wsdl4j:${wsdlVersion}"
-	annotationProcessor "org.projectlombok:lombok"
 
     jaxb "org.glassfish.jaxb:jaxb-xjc:${jaxbVersion}"
-	compileOnly "org.projectlombok:lombok"
-    compileOnly files(genJaxb.classesDir).builtBy(genJaxb)
+    compile files(genJaxb.classesDir).builtBy(genJaxb)
+	
+	annotationProcessor "org.projectlombok:lombok"
+    compileOnly "org.projectlombok:lombok"
 }
