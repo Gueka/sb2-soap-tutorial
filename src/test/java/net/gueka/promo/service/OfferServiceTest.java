@@ -1,5 +1,7 @@
 package net.gueka.promo.service;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -11,8 +13,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,28 +26,31 @@ import net.gueka.promo.schema.Data;
 @SpringBootTest
 public class OfferServiceTest {
 
+    private static final String NEW_USER_REGEX_MESSAGE = "^[0-9]{1,3} days left with 20% discount";
     @Autowired
     OfferService service;
 
-    @Test
-    public void testNewUserPromotion() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = { -30, 0, -61, -91, -122, -152, -180 })
+    public void testNewUserPromotion(Integer days) throws Exception {
         // Given
-        Data data = generateDummyRequest(-1);
-        
+        Data data = generateDummyRequest(days);
+
         // When
         List<String> offers = service.getOffers(data);
-        
+
         // Then
-        String message = String.format(OfferService.NEW_USER_DISCOUNT_MESSAGE, 153, "20%");
         assertTrue("Has to return at leas a message", offers.size() > 0);
-        assertEquals("Has to return first message as " + message, message, offers.get(0));
+        assertThat("Has to return first message with regex: " + NEW_USER_REGEX_MESSAGE, offers.get(0),
+                matchesPattern(NEW_USER_REGEX_MESSAGE));
         assertEquals("Has only 1 message", 1, offers.size());
     }
 
-    @Test
-    public void testNoPromotion() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = {-214, -284, -458, -762, 61})
+    public void testNoPromotion(Integer days) throws Exception {
         // Given
-        Data data = generateDummyRequest(-7);
+        Data data = generateDummyRequest(days);
         
         // When
         List<String> offers = service.getOffers(data);
@@ -53,10 +59,11 @@ public class OfferServiceTest {
         assertEquals("Shouldn't have any promotion message", 0, offers.size());
     }
 
-    @Test
-    public void testMemberNewYear() throws Exception {
+    @ParameterizedTest
+    @ValueSource(ints = { -356, -714, -1070, -1436 })
+    public void testMemberNewYear(Integer days) throws Exception {
         // Given
-        Data data = generateDummyRequest(-12);
+        Data data = generateDummyRequest(days);
         
         // When
         List<String> offers = service.getOffers(data);
@@ -68,9 +75,9 @@ public class OfferServiceTest {
         assertEquals("Has only 1 message", 1, offers.size());
     }
 
-    private Data generateDummyRequest(Integer months) throws DatatypeConfigurationException {
+    private Data generateDummyRequest(Integer days) throws DatatypeConfigurationException {
         GregorianCalendar gcal = new GregorianCalendar();
-        gcal.add(Calendar.MONTH, months);
+        gcal.add(Calendar.DAY_OF_YEAR, days);
         XMLGregorianCalendar date = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
         Data data = new Data();
         data.setUserId("007");

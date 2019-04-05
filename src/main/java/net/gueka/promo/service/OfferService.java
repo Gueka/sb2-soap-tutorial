@@ -26,9 +26,10 @@ public class OfferService {
 	
 	private void hasNewUserPromotion(Data data, List<String> offers) {
 		Calendar todayDate = new GregorianCalendar();
+		Calendar initDate = data.getInitDate().toGregorianCalendar();
 		Calendar maxDate = (Calendar) data.getInitDate().toGregorianCalendar().clone();
 		maxDate.add(Calendar.MONTH, NEW_USER_PROMOTION_DURATION);
-		if (maxDate.after(todayDate)) {
+		if (todayDate.after(initDate) && maxDate.after(todayDate)) {
 			long diff = maxDate.getTime().getTime() - todayDate.getTime().getTime();
 			long days = diff / (1000 * 60 * 60 * 24);
 			offers.add(String.format(NEW_USER_DISCOUNT_MESSAGE, days, "20%"));
