@@ -2,6 +2,7 @@ buildscript {
     ext {
         jaxbVersion = '2.3.2'
         wsdlVersion = '1.6.3'
+        junitVersion = '5.3.2'
     }
 }
 
@@ -70,8 +71,11 @@ bootJar {
 }
 
 dependencies {
-	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	implementation "org.springframework.boot:spring-boot-starter-web-services"
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
     compile "wsdl4j:wsdl4j:${wsdlVersion}"
 
     jaxb "org.glassfish.jaxb:jaxb-xjc:${jaxbVersion}"
