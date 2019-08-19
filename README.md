@@ -1,7 +1,7 @@
 # Spring boot 2 SOAP service tutorial
 
 ## Client specifications
-Imagine that your client client streamflix wants to create a SOAP service based on a service description (schema), by providing basic user information it will return a list of messages or client offers that the business needs to attract new clients but also offer promotions based on specific dates.
+Imagine that your client streamflix wants to create a SOAP service based on a service description (schema), by providing basic user information it will return a list of messages or client offers that the business needs to attract new clients but also offer promotions based on specific dates.
 
 ## Creating our promotion service
 Clone this repository and follow [this tutorial](https://medium.com/@marcojcapo/first-stop-a-soap-service-dd3498ad338d) to get detailed information of this system.
